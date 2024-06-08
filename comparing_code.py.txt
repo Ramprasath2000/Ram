@@ -1,0 +1,46 @@
+import random
+from tkinter import Tk, filedialog
+
+# Function to read a notebook file and shuffle its contents
+def shuffle_notebook(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+        random.shuffle(lines)
+    return lines
+
+# Function to compare shuffled notebook files and find matches
+def find_matches(file1, file2):
+    matches = []
+    shuffled1 = shuffle_notebook(file1)
+    shuffled2 = shuffle_notebook(file2)
+    min_length = min(len(shuffled1), len(shuffled2))
+    
+    for i in range(min_length):
+        if shuffled1[i] == shuffled2[i]:
+            matches.append(shuffled1[i].strip())  # Append matching line to matches list
+    
+    return matches
+
+# Create a Tkinter root window
+root = Tk()
+root.withdraw()  # Hide the root window
+
+# Ask user to select the first notebook file
+file_path1 = filedialog.askopenfilename(title="Select the first notebook file")
+if not file_path1:
+    print("No file selected. Exiting.")
+    exit()
+
+# Ask user to select the second notebook file
+file_path2 = filedialog.askopenfilename(title="Select the second notebook file")
+if not file_path2:
+    print("No file selected. Exiting.")
+    exit()
+
+matches = find_matches(file_path1, file_path2)
+if matches:
+    print("Matches found:")
+    for match in matches:
+        print(match)
+else:
+    print("No matches found.")
